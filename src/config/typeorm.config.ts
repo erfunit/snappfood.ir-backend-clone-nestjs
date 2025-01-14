@@ -6,8 +6,6 @@ dotenv.config();
 export function TypeOrmConfig(): TypeOrmModuleOptions {
   const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME } = process.env;
 
-  console.log('DB Config:', { DB_HOST, DB_PORT, DB_USERNAME, DB_NAME });
-
   return {
     type: 'mysql',
     host: DB_HOST,
