@@ -25,6 +25,9 @@ export class SupplierEntity {
   @Column({ unique: true })
   mobile: string;
 
+  @Column({ nullable: true, default: false })
+  mobile_verify: boolean;
+
   @Column()
   store_name: string;
 
