@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseInterceptors,
@@ -12,6 +11,7 @@ import {
   MaxFileSizeValidator,
   FileTypeValidator,
   Query,
+  Put,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -28,7 +28,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  @ApiConsumes(SwaggerConsumes.MultipartData, SwaggerConsumes.Json)
+  @ApiConsumes(SwaggerConsumes.MultipartData)
   @UseInterceptors(UploadFileS3('image'))
   create(
     @UploadedFile(
@@ -52,12 +52,23 @@ export class CategoryController {
     return this.categoryService.findAll(paginationDto);
   }
 
-  @Patch(':id')
+  @Put(':id')
+  @ApiConsumes(SwaggerConsumes.MultipartData)
+  @UseInterceptors(UploadFileS3('image'))
   update(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 2 * 1024 * 1024 }),
+          new FileTypeValidator({ fileType: 'image/(jpg|png|jpeg|webp)' }),
+        ],
+      }),
+    )
+    image: Express.Multer.File,
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoryService.update(+id, updateCategoryDto);
+    return this.categoryService.update(+id, updateCategoryDto, image);
   }
 
   @Delete(':id')

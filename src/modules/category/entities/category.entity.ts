@@ -21,6 +21,9 @@ export class CategoryEntity {
   @Column()
   image: string;
 
+  @Column({ nullable: true })
+  imageKey: string;
+
   @Column()
   show: boolean;
 
