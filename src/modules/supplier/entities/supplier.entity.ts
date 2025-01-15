@@ -3,10 +3,13 @@ import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { SupplierOTPEntity } from './supplier-otp.entity';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity {
@@ -44,4 +47,11 @@ export class SupplierEntity {
 
   @OneToMany(() => SupplierEntity, (sub) => sub.agent)
   subsets: SupplierEntity[];
+
+  @Column({ nullable: true })
+  otpId: number;
+
+  @OneToOne(() => SupplierOTPEntity, (otp) => otp.supplier)
+  @JoinColumn()
+  otp: SupplierOTPEntity;
 }

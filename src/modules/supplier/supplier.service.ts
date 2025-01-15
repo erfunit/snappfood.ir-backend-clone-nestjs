@@ -8,12 +8,15 @@ import { SupplierEntity } from './entities/supplier.entity';
 import { Repository } from 'typeorm';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { CategoryService } from '../category/category.service';
+import { SupplierOTPEntity } from './entities/supplier-otp.entity';
 
 @Injectable()
 export class SupplierService {
   constructor(
     @InjectRepository(SupplierEntity)
     private readonly supplierRepository: Repository<SupplierEntity>,
+    @InjectRepository(SupplierOTPEntity)
+    private readonly otpEntity: Repository<SupplierOTPEntity>,
     private readonly categoryService: CategoryService,
   ) {}
 
