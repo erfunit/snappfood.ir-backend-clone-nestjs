@@ -3,11 +3,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserAddressEntity } from './address.entity';
+import { OTPEntity } from './otp.entity';
 
 @Entity(EntityName.User)
 export class UserEntity {
@@ -23,7 +26,10 @@ export class UserEntity {
   @Column({ unique: true })
   mobile: string;
 
-  @Column({ unique: true, nullable: false })
+  @Column({ nullable: true, default: false })
+  mobile_verify: boolean;
+
+  @Column({ nullable: true })
   email: string;
 
   @Column({ unique: true })
@@ -39,6 +45,13 @@ export class UserEntity {
     nullable: true,
   })
   addressList: UserAddressEntity[];
+
+  @Column({ nullable: true })
+  otpId: number;
+
+  @OneToOne(() => OTPEntity, (otp) => otp.user)
+  @JoinColumn()
+  otp: OTPEntity;
 
   @CreateDateColumn()
   created_at: Date;
