@@ -1,22 +1,30 @@
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
+  Scope,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SupplierEntity } from './entities/supplier.entity';
 import { Repository } from 'typeorm';
-import { CreateSupplierDto } from './dto/create-supplier.dto';
+import {
+  CreateSupplierDto,
+  SupplimentaryInformationDto,
+} from './dto/create-supplier.dto';
 import { CategoryService } from '../category/category.service';
 import { SupplierOTPEntity } from './entities/supplier-otp.entity';
 import { randomInt } from 'crypto';
 import { CheckOtpDto } from '../auth/dto/otp.dto';
 import { TokensPayload } from '../auth/types/payload';
 import { JwtService } from '@nestjs/jwt';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
+import { SupplierStatus } from './enum/supplier-status.enum';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class SupplierService {
   constructor(
     @InjectRepository(SupplierEntity)
@@ -25,6 +33,8 @@ export class SupplierService {
     private readonly otpRepository: Repository<SupplierOTPEntity>,
     private readonly categoryService: CategoryService,
     private readonly jwtService: JwtService,
+    @Inject(REQUEST)
+    private readonly request: Request,
   ) {}
 
   async supplierSingup(signupDto: CreateSupplierDto) {
@@ -64,6 +74,26 @@ export class SupplierService {
     await this.createOtpForSupplier(supplier);
     return {
       message: 'otp code sent successfully',
+    };
+  }
+
+  async saveSupplimentaryInformation(infoDto: SupplimentaryInformationDto) {
+    const { id } = this.request.user;
+    const { email, national_code } = infoDto;
+    let supplier = await this.supplierRepository.findOneBy({ national_code });
+    if (supplier && supplier.id !== id)
+      throw new ConflictException('national code already used');
+    supplier = await this.supplierRepository.findOneBy({ email });
+    if (supplier && supplier.id !== id)
+      throw new ConflictException('email code already used');
+
+    await this.supplierRepository.update(
+      { id },
+      { email, national_code, status: SupplierStatus.SupplimentaryInformation },
+    );
+
+    return {
+      message: 'information updated successfully',
     };
   }
 
@@ -113,13 +143,17 @@ export class SupplierService {
         },
       );
     }
+    await this.supplierRepository.update(
+      { id: supplier.id },
+      { status: SupplierStatus.Registered },
+    );
     const { accessToken, refreshToken } = this.makeTokensForUser({
       id: supplier.id,
     });
     return {
       accessToken,
       refreshToken,
-      message: 'You logged-in successfully',
+      message: 'phone number registered successfully',
     };
   }
 

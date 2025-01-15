@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { SupplierOTPEntity } from './supplier-otp.entity';
+import { SupplierStatus } from '../enum/supplier-status.enum';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity {
@@ -21,6 +22,15 @@ export class SupplierEntity {
 
   @Column()
   manager_family: string;
+
+  @Column({ nullable: true, unique: true })
+  national_code: string;
+
+  @Column({ nullable: true, unique: true })
+  email: string;
+
+  @Column({ default: SupplierStatus.Registered })
+  status: SupplierStatus;
 
   @Column({ unique: true })
   mobile: string;

@@ -1,6 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
+  IsEmail,
+  IsIdentityCard,
   IsMobilePhone,
   IsNotEmpty,
   IsNumber,
@@ -46,4 +48,14 @@ export class CreateSupplierDto {
   @IsNumber()
   @IsOptional()
   agent_id: number;
+}
+
+export class SupplimentaryInformationDto {
+  @ApiProperty()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty()
+  @IsIdentityCard('IR')
+  national_code: string;
 }
