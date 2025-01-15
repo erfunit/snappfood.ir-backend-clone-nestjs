@@ -1,7 +1,8 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { EntityName } from 'src/common/enums/entity-name.enum';
 
-@Entity('otp')
+@Entity(EntityName.OTP)
 export class OTPEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
