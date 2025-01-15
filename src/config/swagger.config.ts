@@ -4,8 +4,8 @@ import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-s
 
 export function SwaggerConfigInit(app: INestApplication): void {
   const document = new DocumentBuilder()
-    .setTitle('Virgool backend clone')
-    .setDescription('backend of virgool website clone using nestjs')
+    .setTitle('Snappfood backend clone')
+    .setDescription('backend of snappfood website clone using nestjs and mysql')
     .setVersion('v0.0.1')
     .addBearerAuth(SwaggerAuthConfig(), 'Authorization')
     .build();

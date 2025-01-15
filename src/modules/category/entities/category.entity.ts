@@ -24,7 +24,7 @@ export class CategoryEntity {
   @Column()
   show: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   parentId: number;
 
   @ManyToOne(() => CategoryEntity, (parent) => parent.children, {
