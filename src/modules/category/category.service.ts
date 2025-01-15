@@ -87,6 +87,12 @@ export class CategoryService {
     return category;
   }
 
+  async findOneBySlugControllerWrapper(slug: string) {
+    const category = await this.findOneBySlug(slug);
+    if (!category) throw new NotFoundException('category not found');
+    return category;
+  }
+
   findOneBySlug(slug: string) {
     return this.categoryRepository.findOneBy({ slug });
   }
@@ -144,7 +150,11 @@ export class CategoryService {
     };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(slug: string) {
+    await this.findOneBySlugControllerWrapper(slug);
+    await this.categoryRepository.delete({ slug });
+    return {
+      message: `category with id ${slug} deleted successfully`,
+    };
   }
 }

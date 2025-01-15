@@ -52,6 +52,11 @@ export class CategoryController {
     return this.categoryService.findAll(paginationDto);
   }
 
+  @Get(':slug')
+  findBySlug(@Param('slug') slug: string) {
+    return this.categoryService.findOneBySlugControllerWrapper(slug);
+  }
+
   @Put(':id')
   @ApiConsumes(SwaggerConsumes.MultipartData)
   @UseInterceptors(UploadFileS3('image'))
@@ -71,8 +76,8 @@ export class CategoryController {
     return this.categoryService.update(+id, updateCategoryDto, image);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
+  @Delete(':slug')
+  remove(@Param('slug') slug: string) {
+    return this.categoryService.remove(slug);
   }
 }
