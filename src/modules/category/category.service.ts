@@ -10,6 +10,11 @@ import { CategoryEntity } from './entities/category.entity';
 import { Repository } from 'typeorm';
 import { S3Service } from '../s3/s3.service';
 import slugify from 'slugify';
+import { PaginationDto } from 'src/common/pagination/dto/pagination.dto';
+import {
+  paginationGenerator,
+  paginationResolver,
+} from 'src/common/pagination/util/pagination.util';
 
 @Injectable()
 export class CategoryService {
@@ -50,7 +55,8 @@ export class CategoryService {
     };
   }
 
-  async findAll() {
+  async findAll(paginationdto: PaginationDto) {
+    const { page, limit, skip } = paginationResolver(paginationdto);
     const [categories, count] = await this.categoryRepository.findAndCount({
       relations: {
         parent: true,
@@ -60,10 +66,12 @@ export class CategoryService {
           slug: true,
         },
       },
+      skip,
+      take: limit,
     });
     return {
       data: categories,
-      count,
+      pagination: paginationGenerator(count, page, limit),
     };
   }
 
