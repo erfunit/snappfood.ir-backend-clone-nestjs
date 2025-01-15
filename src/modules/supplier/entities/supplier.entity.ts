@@ -19,7 +19,7 @@ export class SupplierEntity {
   @Column()
   manager_family: string;
 
-  @Column()
+  @Column({ unique: true })
   mobile: string;
 
   @Column()
