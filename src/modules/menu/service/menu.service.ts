@@ -1,4 +1,4 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { FoodDto } from '../dto/food.dto';
 import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
@@ -55,5 +55,11 @@ export class MenuService {
         menu: true,
       },
     });
+  }
+
+  async getOne(id: number) {
+    const food = await this.menuRepository.findOneBy({ id });
+    if (!food) throw new NotFoundException('food not found');
+    return food;
   }
 }
