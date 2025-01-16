@@ -9,10 +9,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FeedbackEntity } from './entities/feedback.entity';
 import { MenuEntity } from './entities/menu.entity';
 import { MenuTypeEntity } from './entities/type.entity';
+import { SupplierModule } from '../supplier/supplier.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([FeedbackEntity, MenuEntity, MenuTypeEntity]),
+    SupplierModule,
   ],
   controllers: [MenuController, MenuTypeController, FeedbackController],
   providers: [MenuService, MenuTypeService, FeedbackService],

@@ -21,5 +21,17 @@ import { SupplierDocsEntity } from './entities/supplier-docs.entity';
   ],
   controllers: [SupplierController],
   providers: [SupplierService, CategoryService, S3Service, JwtService],
+  exports: [
+    TypeOrmModule.forFeature([
+      SupplierEntity,
+      CategoryEntity,
+      SupplierOTPEntity,
+      SupplierDocsEntity,
+    ]),
+    SupplierService,
+    JwtService,
+    S3Service,
+    CategoryService,
+  ],
 })
 export class SupplierModule {}
