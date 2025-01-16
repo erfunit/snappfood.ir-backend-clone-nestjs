@@ -12,6 +12,7 @@ import {
 import { UserAddressEntity } from './address.entity';
 import { OTPEntity } from './otp.entity';
 import { FeedbackEntity } from 'src/modules/menu/entities/feedback.entity';
+import { BasketEntity } from 'src/modules/basket/entity/basket.entity';
 
 @Entity(EntityName.User)
 export class UserEntity {
@@ -56,6 +57,9 @@ export class UserEntity {
 
   @OneToMany(() => FeedbackEntity, (feedback) => feedback.user)
   feedbacks: FeedbackEntity[];
+
+  @OneToMany(() => BasketEntity, (basket) => basket.user)
+  basketItems: BasketEntity[];
 
   @CreateDateColumn()
   created_at: Date;
