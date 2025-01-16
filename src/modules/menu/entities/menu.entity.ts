@@ -23,7 +23,7 @@ export class MenuEntity {
   @Column({ type: 'double' })
   price: number;
 
-  @Column({ type: 'double' })
+  @Column({ type: 'double', default: 0 })
   discount: number;
 
   @Column()
