@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { MenuTypeService } from '../service/type.service';
 import { SupplierAuthGuard } from 'src/modules/supplier/guard/supplier-auth.guard';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { SwaggerConsumes } from 'src/common/enums/swagger-consumes';
 import { MenuTypeDto } from '../dto/menu-type.dto';
 
@@ -37,6 +37,8 @@ export class MenuTypeController {
   }
 
   @Patch(':id')
+  @UseGuards(SupplierAuthGuard)
+  @ApiBearerAuth('Authorization')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() menuTypeDto: MenuTypeDto,
@@ -45,6 +47,8 @@ export class MenuTypeController {
   }
 
   @Delete(':id')
+  @UseGuards(SupplierAuthGuard)
+  @ApiBearerAuth('Authorization')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.menuTypeService.remove(id);
   }
