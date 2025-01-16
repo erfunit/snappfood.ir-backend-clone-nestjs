@@ -9,7 +9,7 @@ import { Request } from 'express';
 import { SupplierService } from '../supplier.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class SupplierAuthGuard implements CanActivate {
   constructor(private supplierService: SupplierService) {}
   async canActivate(context: ExecutionContext) {
     const httpContext = context.switchToHttp();
