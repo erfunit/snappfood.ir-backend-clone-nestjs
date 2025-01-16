@@ -21,6 +21,7 @@ export class MenuTypeController {
 
   @Post()
   @UseGuards(SupplierAuthGuard)
+  @ApiBearerAuth('Authorization')
   @ApiConsumes(SwaggerConsumes.Json, SwaggerConsumes.UrlEncoded)
   create(@Body() createDto: MenuTypeDto) {
     return this.menuTypeService.create(createDto);
