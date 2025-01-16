@@ -6,7 +6,7 @@ import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 
 @Injectable({ scope: Scope.REQUEST })
-export class TypeService {
+export class MenuTypeService {
   constructor(
     @InjectRepository(MenuTypeEntity)
     private readonly typeRepository: Repository<MenuTypeEntity>,
