@@ -14,6 +14,7 @@ import {
 import { SupplierOTPEntity } from './supplier-otp.entity';
 import { SupplierStatus } from '../enum/supplier-status.enum';
 import { SupplierDocsEntity } from './supplier-docs.entity';
+import { MenuTypeEntity } from 'src/modules/menu/entities/type.entity';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity {
@@ -63,6 +64,9 @@ export class SupplierEntity {
 
   @OneToMany(() => SupplierEntity, (sub) => sub.agent)
   subsets: SupplierEntity[];
+
+  @OneToMany(() => MenuTypeEntity, (type) => type.supplier)
+  menu_types: MenuTypeEntity[];
 
   @Column({ nullable: true })
   otpId: number;
