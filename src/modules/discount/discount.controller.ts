@@ -2,12 +2,15 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
 import { ApiConsumes } from '@nestjs/swagger';
 import { SwaggerConsumes } from 'src/common/enums/swagger-consumes';
+import { DiscountDto } from './dto/discount.dto';
+import { DiscountService } from './discount.service';
 
 @Controller('discount')
 export class DiscountController {

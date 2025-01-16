@@ -10,8 +10,11 @@ export class DiscountEntity {
   @Column()
   code: string;
 
-  @Column({ type: 'double' })
+  @Column({ type: 'double', nullable: true })
   percent: number;
+
+  @Column({ type: 'double', nullable: true })
+  amount: number;
 
   @Column({ nullable: true })
   expires_in: Date;
@@ -24,6 +27,9 @@ export class DiscountEntity {
 
   @Column({ default: true })
   active: boolean;
+
+  @Column({ nullable: true })
+  supplierId: number;
 
   @OneToMany(() => BasketEntity, (basket) => basket.discount)
   baskets: BasketEntity[];
