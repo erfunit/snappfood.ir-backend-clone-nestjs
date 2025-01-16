@@ -4,6 +4,7 @@ import { MenuTypeEntity } from '../entities/type.entity';
 import { Repository } from 'typeorm';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
+import { MenuTypeDto } from '../dto/menu-type.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class MenuTypeService {
@@ -14,7 +15,7 @@ export class MenuTypeService {
     private readonly request: Request,
   ) {}
 
-  async create(createTypeDto: { title: string }) {
+  async create(createTypeDto: MenuTypeDto) {
     const { id: supplierId } = this.request.user;
     const type = this.typeRepository.create({
       title: createTypeDto.title,

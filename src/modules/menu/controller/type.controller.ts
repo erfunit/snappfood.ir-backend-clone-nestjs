@@ -12,10 +12,18 @@ import { MenuTypeService } from '../service/type.service';
 import { SupplierAuthGuard } from 'src/modules/supplier/guard/supplier-auth.guard';
 import { ApiConsumes } from '@nestjs/swagger';
 import { SwaggerConsumes } from 'src/common/enums/swagger-consumes';
+import { MenuTypeDto } from '../dto/menu-type.dto';
 
 @Controller('menu-type')
 export class MenuTypeController {
   constructor(private readonly menuTypeService: MenuTypeService) {}
+
+  @Post()
+  @UseGuards(SupplierAuthGuard)
+  @ApiConsumes(SwaggerConsumes.Json, SwaggerConsumes.UrlEncoded)
+  create(@Body() createDto: MenuTypeDto) {
+    return this.menuTypeService.create(createDto);
+  }
 
   @Get()
   findAll() {
@@ -25,13 +33,6 @@ export class MenuTypeController {
   @Get(':id')
   findOneById(@Param('id', ParseIntPipe) id: number) {
     return this.menuTypeService.findOneById(id);
-  }
-
-  @Post()
-  @UseGuards(SupplierAuthGuard)
-  @ApiConsumes(SwaggerConsumes.Json, SwaggerConsumes.UrlEncoded)
-  create(@Body() createDto: { title: string }) {
-    return this.menuTypeService.create(createDto);
   }
 
   @Delete(':id')
