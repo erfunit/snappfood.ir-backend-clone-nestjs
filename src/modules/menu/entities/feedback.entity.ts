@@ -7,8 +7,9 @@ import {
 } from 'typeorm';
 import { MenuEntity } from './menu.entity';
 import { UserEntity } from 'src/modules/users/entity/user.entity';
+import { EntityName } from 'src/common/enums/entity-name.enum';
 
-@Entity('feedback')
+@Entity(EntityName.Feedback)
 export class FeedbackEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;

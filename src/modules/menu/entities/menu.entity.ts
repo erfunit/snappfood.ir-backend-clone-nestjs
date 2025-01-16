@@ -8,8 +8,9 @@ import {
 import { MenuTypeEntity } from './type.entity';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 import { FeedbackEntity } from './feedback.entity';
+import { EntityName } from 'src/common/enums/entity-name.enum';
 
-@Entity('menu')
+@Entity(EntityName.Menu)
 export class MenuEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;

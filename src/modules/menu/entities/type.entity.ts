@@ -7,8 +7,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { MenuEntity } from './menu.entity';
+import { EntityName } from 'src/common/enums/entity-name.enum';
 
-@Entity('menu_type')
+@Entity(EntityName.MenuType)
 export class MenuTypeEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;

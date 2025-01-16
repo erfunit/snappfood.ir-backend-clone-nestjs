@@ -6,4 +6,7 @@ export enum EntityName {
   Supplier = 'supplier',
   SupplierOTP = 'supplier_otp',
   SupplierDocs = 'supplier_docts',
+  Menu = 'menu',
+  MenuType = 'menu_type',
+  Feedback = 'feedback',
 }
