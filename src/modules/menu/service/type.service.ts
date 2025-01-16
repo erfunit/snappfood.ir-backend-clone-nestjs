@@ -36,7 +36,8 @@ export class MenuTypeService {
   }
 
   async findOneById(id: number) {
-    const type = await this.typeRepository.findOneBy({ id });
+    const { id: supplierId } = this.request.user;
+    const type = await this.typeRepository.findOneBy({ id, supplierId });
     if (!type) throw new NotFoundException('menu type not found');
     return type;
   }

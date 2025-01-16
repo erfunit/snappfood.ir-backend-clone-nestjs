@@ -32,6 +32,8 @@ export class MenuTypeController {
   }
 
   @Get(':id')
+  @UseGuards(SupplierAuthGuard)
+  @ApiBearerAuth('Authorization')
   findOneById(@Param('id', ParseIntPipe) id: number) {
     return this.menuTypeService.findOneById(id);
   }
