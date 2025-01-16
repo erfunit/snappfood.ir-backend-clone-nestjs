@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { BasketService } from './basket.service';
 import { AddToBasketDto } from './dto/basket.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
@@ -21,5 +29,8 @@ export class BasketController {
   getBasket() {}
 
   @Delete()
-  removeFromBasket() {}
+  @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
+  removeFromBasket(@Query() basketDto: AddToBasketDto) {
+    return this.basketService.removeFromBasket(basketDto);
+  }
 }

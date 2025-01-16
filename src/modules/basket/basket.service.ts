@@ -1,4 +1,4 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BasketEntity } from './entity/basket.entity';
 import { Repository } from 'typeorm';
@@ -26,7 +26,7 @@ export class BasketService {
     if (basket) {
       basket.count += 1;
     } else {
-      basket = await this.basketRepository.create({
+      basket = this.basketRepository.create({
         userId,
         foodId,
         count: 1,
@@ -38,7 +38,25 @@ export class BasketService {
     };
   }
 
-  async removeFromBasket() {}
+  async removeFromBasket({ foodId }: AddToBasketDto) {
+    const { id: userId } = this.request.user;
+    await this.menuService.getOne(foodId);
+    const basket = await this.basketRepository.findOne({
+      where: { foodId, userId },
+    });
+    if (!basket)
+      throw new BadRequestException(
+        "you don't have this food inside your basket",
+      );
+    if (basket.count > 1) {
+      basket.count -= 1;
+      await this.basketRepository.save(basket);
+    } else await this.basketRepository.delete({ id: basket.id });
+
+    return {
+      message: 'item removed',
+    };
+  }
 
   async getBasket() {}
 
