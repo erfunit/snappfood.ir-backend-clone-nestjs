@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -33,6 +34,14 @@ export class MenuTypeController {
   @Get(':id')
   findOneById(@Param('id', ParseIntPipe) id: number) {
     return this.menuTypeService.findOneById(id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() menuTypeDto: MenuTypeDto,
+  ) {
+    return this.menuTypeService.update(id, menuTypeDto);
   }
 
   @Delete(':id')

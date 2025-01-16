@@ -41,6 +41,15 @@ export class MenuTypeService {
     return type;
   }
 
+  async update(id: number, updateDto: MenuTypeDto) {
+    await this.findOneById(id);
+    const { title } = updateDto;
+    await this.typeRepository.update({ id }, { title });
+    return {
+      message: 'menu type updated successfully',
+    };
+  }
+
   async remove(id: number) {
     await this.findOneById(id);
     await this.typeRepository.delete({ id });
