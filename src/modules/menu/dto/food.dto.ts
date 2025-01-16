@@ -1,13 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Length,
+  Max,
+  Min,
+} from 'class-validator';
 
-export class Food {
+export class FoodDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @Length(3, 50)
-  name: string;
+  title: string;
 
   @ApiProperty({ format: 'binary' })
   @IsString()
@@ -25,6 +32,8 @@ export class Food {
     typeof value === 'string' ? parseInt(value, 10) : value,
   )
   @IsNumber()
+  @Min(0)
+  @Max(100)
   discount: number;
 
   @ApiProperty()

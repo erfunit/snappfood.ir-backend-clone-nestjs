@@ -21,6 +21,9 @@ export class MenuEntity {
   @Column()
   image: string;
 
+  @Column()
+  imageKey: string;
+
   @Column({ type: 'double' })
   price: number;
 
