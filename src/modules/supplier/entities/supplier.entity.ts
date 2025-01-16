@@ -76,7 +76,7 @@ export class SupplierEntity {
   @JoinColumn()
   otp: SupplierOTPEntity;
 
-  @Column()
+  @Column({ nullable: true })
   docsId: number;
 
   @OneToOne(() => SupplierDocsEntity, (doc) => doc.supplier)

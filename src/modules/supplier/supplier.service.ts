@@ -13,6 +13,7 @@ import { SupplierEntity } from './entities/supplier.entity';
 import { Repository } from 'typeorm';
 import {
   CreateSupplierDto,
+  LoginSupplierDto,
   SupplimentaryInformationDto,
 } from './dto/create-supplier.dto';
 import { CategoryService } from '../category/category.service';
@@ -67,17 +68,28 @@ export class SupplierService {
         throw new NotFoundException('category not found');
       });
     const agent = await this.supplierRepository.findOneBy({ id: agent_id });
-    if (!agent) throw new NotFoundException('agent not found');
+    if (!agent && agent_id) throw new NotFoundException('agent not found');
     const invite_code = parseInt(mobile).toString(32).toUpperCase();
     const supplier = this.supplierRepository.create({
       manager_family,
       manager_name,
       store_name,
+      mobile,
       category_id: category.id,
-      agentId: agent.id,
+      agentId: agent_id,
       invite_code,
     });
     await this.supplierRepository.save(supplier);
+    await this.createOtpForSupplier(supplier);
+    return {
+      message: 'otp code sent successfully',
+    };
+  }
+
+  async loginSupplier({ mobile }: LoginSupplierDto) {
+    const supplier = await this.supplierRepository.findOneBy({ mobile });
+    if (!supplier)
+      throw new NotFoundException('supplier with this phone number not found');
     await this.createOtpForSupplier(supplier);
     return {
       message: 'otp code sent successfully',

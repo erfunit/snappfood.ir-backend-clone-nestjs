@@ -16,7 +16,7 @@ import { SupplierModule } from '../supplier/supplier.module';
     TypeOrmModule.forFeature([FeedbackEntity, MenuEntity, MenuTypeEntity]),
     SupplierModule,
   ],
-  controllers: [MenuController, MenuTypeController, FeedbackController],
+  controllers: [MenuTypeController, MenuController, FeedbackController],
   providers: [MenuService, MenuTypeService, FeedbackService],
 })
 export class MenuModule {}

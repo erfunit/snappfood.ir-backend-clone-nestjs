@@ -17,7 +17,6 @@ export class FoodDto {
   title: string;
 
   @ApiProperty({ format: 'binary' })
-  @IsString()
   image: string;
 
   @ApiProperty()

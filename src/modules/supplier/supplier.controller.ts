@@ -9,6 +9,7 @@ import {
 import { SupplierService } from './supplier.service';
 import {
   CreateSupplierDto,
+  LoginSupplierDto,
   SupplimentaryInformationDto,
   UploadDocsDto,
 } from './dto/create-supplier.dto';
@@ -27,6 +28,12 @@ export class SupplierController {
   @ApiConsumes(SwaggerConsumes.Json, SwaggerConsumes.UrlEncoded)
   supplierSignup(@Body() signupDto: CreateSupplierDto) {
     return this.supplierService.supplierSingup(signupDto);
+  }
+
+  @Post('login')
+  @ApiConsumes(SwaggerConsumes.Json, SwaggerConsumes.UrlEncoded)
+  loginSupplier(@Body() loginSupplier: LoginSupplierDto) {
+    return this.supplierService.loginSupplier(loginSupplier);
   }
 
   @Post('check-otp')

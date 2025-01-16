@@ -25,6 +25,6 @@ export class MenuTypeEntity {
   })
   supplier: SupplierEntity;
 
-  @OneToMany(() => MenuEntity, (menu) => menu.menu_type)
+  @OneToMany(() => MenuEntity, (menu) => menu.type)
   menu: MenuEntity[];
 }

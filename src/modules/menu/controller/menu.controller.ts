@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   FileTypeValidator,
+  Get,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
+  ParseIntPipe,
   Post,
   UploadedFile,
   UseGuards,
@@ -38,5 +41,10 @@ export class MenuController {
     image: Express.Multer.File,
   ) {
     return this.menuService.create(foodDto, image);
+  }
+
+  @Get('full-menu/:supplierId')
+  getFullMenu(@Param('supplierId', ParseIntPipe) supplierId: number) {
+    return this.menuService.getFullMenu(supplierId);
   }
 }

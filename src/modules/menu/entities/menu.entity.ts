@@ -33,7 +33,7 @@ export class MenuEntity {
   @Column()
   description: string;
 
-  @Column({ type: 'double' })
+  @Column({ type: 'double', default: 0 })
   score: number;
 
   @Column()
@@ -43,7 +43,7 @@ export class MenuEntity {
   supplierId: number;
 
   @ManyToOne(() => MenuTypeEntity, (type) => type.menu)
-  menu_type: MenuTypeEntity;
+  type: MenuTypeEntity;
 
   @ManyToOne(() => SupplierEntity, (sup) => sup.items)
   supplier: SupplierEntity;

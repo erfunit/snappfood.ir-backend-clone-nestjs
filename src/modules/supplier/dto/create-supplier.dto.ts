@@ -67,3 +67,9 @@ export class UploadDocsDto {
   @ApiProperty({ format: 'binary' })
   image: string;
 }
+
+export class LoginSupplierDto {
+  @ApiProperty()
+  @IsMobilePhone('fa-IR')
+  mobile: string;
+}

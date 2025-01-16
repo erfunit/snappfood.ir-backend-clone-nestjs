@@ -7,6 +7,7 @@ import { MenuEntity } from '../entities/menu.entity';
 import { Repository } from 'typeorm';
 import { MenuTypeService } from './type.service';
 import { S3Service } from 'src/modules/s3/s3.service';
+import { MenuTypeEntity } from '../entities/type.entity';
 
 @Injectable({ scope: Scope.REQUEST })
 export class MenuService {
@@ -15,6 +16,8 @@ export class MenuService {
     private readonly request: Request,
     @InjectRepository(MenuEntity)
     private readonly menuRepository: Repository<MenuEntity>,
+    @InjectRepository(MenuTypeEntity)
+    private readonly menuTypeRepository: Repository<MenuTypeEntity>,
     private readonly typeService: MenuTypeService,
     private readonly s3Service: S3Service,
   ) {}
@@ -39,5 +42,18 @@ export class MenuService {
     });
 
     await this.menuRepository.save(item);
+    return {
+      message: 'new item created successfully',
+      data: item,
+    };
+  }
+
+  async getFullMenu(supplierId: number) {
+    return this.menuTypeRepository.find({
+      where: { supplierId },
+      relations: {
+        menu: true,
+      },
+    });
   }
 }
