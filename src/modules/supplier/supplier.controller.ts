@@ -10,12 +10,14 @@ import { SupplierService } from './supplier.service';
 import {
   CreateSupplierDto,
   SupplimentaryInformationDto,
+  UploadDocsDto,
 } from './dto/create-supplier.dto';
 import { CheckOtpDto } from '../auth/dto/otp.dto';
 import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { SwaggerConsumes } from 'src/common/enums/swagger-consumes';
 import { SupplierAuthGuard } from './guard/supplier-auth.guard';
 import { UploadFileFieldsS3 } from 'src/common/interceptors/upload-file.interceptor';
+import { DocumentsType } from './types/doc.type';
 
 @Controller('supplier')
 export class SupplierController {
@@ -52,8 +54,8 @@ export class SupplierController {
   @UseGuards(SupplierAuthGuard)
   @ApiBearerAuth('Authorization')
   uploadDocuments(
-    @Body() infoDto: SupplimentaryInformationDto,
-    @UploadedFiles() files: any,
+    @Body() docsDto: UploadDocsDto,
+    @UploadedFiles() files: DocumentsType,
   ) {
     return this.supplierService.uploadDocuments(files);
   }

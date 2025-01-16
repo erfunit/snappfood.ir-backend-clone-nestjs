@@ -8,6 +8,7 @@ import { CategoryEntity } from '../category/entities/category.entity';
 import { S3Service } from '../s3/s3.service';
 import { JwtService } from '@nestjs/jwt';
 import { SupplierOTPEntity } from './entities/supplier-otp.entity';
+import { SupplierDocsEntity } from './entities/supplier-docs.entity';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { SupplierOTPEntity } from './entities/supplier-otp.entity';
       SupplierEntity,
       CategoryEntity,
       SupplierOTPEntity,
+      SupplierDocsEntity,
     ]),
   ],
   controllers: [SupplierController],

@@ -3,6 +3,7 @@ import {
   ConflictException,
   Inject,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   Scope,
   UnauthorizedException,
@@ -24,6 +25,8 @@ import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { SupplierStatus } from './enum/supplier-status.enum';
 import { DocumentsType } from './types/doc.type';
+import { S3Service } from '../s3/s3.service';
+import { SupplierDocsEntity } from './entities/supplier-docs.entity';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SupplierService {
@@ -32,10 +35,13 @@ export class SupplierService {
     private readonly supplierRepository: Repository<SupplierEntity>,
     @InjectRepository(SupplierOTPEntity)
     private readonly otpRepository: Repository<SupplierOTPEntity>,
+    @InjectRepository(SupplierDocsEntity)
+    private readonly supplierDocsRepository: Repository<SupplierDocsEntity>,
     private readonly categoryService: CategoryService,
     private readonly jwtService: JwtService,
     @Inject(REQUEST)
     private readonly request: Request,
+    private readonly s3Service: S3Service,
   ) {}
 
   async supplierSingup(signupDto: CreateSupplierDto) {
@@ -159,8 +165,46 @@ export class SupplierService {
   }
 
   async uploadDocuments(files: DocumentsType) {
+    const { id: supplierId } = this.request.user;
     const { acceptedDoc, image } = files;
-    return files;
+    const docsLocation = `user-docs/${supplierId}`;
+    const acceptedDocResult = await this.s3Service.updloadFile(
+      acceptedDoc[0],
+      docsLocation,
+    );
+    const imageResult = await this.s3Service.updloadFile(
+      image[0],
+      docsLocation,
+    );
+
+    let supplierDocs = await this.supplierDocsRepository.findOneBy({
+      supplierId,
+    });
+
+    if (
+      !acceptedDocResult ||
+      !acceptedDocResult?.Location ||
+      !imageResult ||
+      !imageResult?.Location
+    )
+      throw new InternalServerErrorException('Uploading failed, try again');
+
+    if (supplierDocs) {
+      supplierDocs.acceptedDoc = acceptedDocResult?.Location;
+      supplierDocs.image = imageResult?.Location;
+    } else {
+      supplierDocs = this.supplierDocsRepository.create({
+        acceptedDoc: acceptedDocResult?.Location,
+        image: imageResult?.Location,
+        supplierId,
+      });
+    }
+
+    await this.supplierDocsRepository.save(supplierDocs);
+
+    return {
+      message: 'docs successfully uploaded',
+    };
   }
 
   makeTokensForUser(payload: TokensPayload) {
