@@ -166,6 +166,9 @@ export class SupplierService {
 
   async uploadDocuments(files: DocumentsType) {
     const { id: supplierId } = this.request.user;
+    const supplier = await this.supplierRepository.findOneBy({
+      id: supplierId,
+    });
     const { acceptedDoc, image } = files;
     const docsLocation = `user-docs/${supplierId}`;
     const acceptedDocResult = await this.s3Service.updloadFile(
@@ -200,7 +203,9 @@ export class SupplierService {
       });
     }
 
+    supplier.status = SupplierStatus.UploadedDocuments;
     await this.supplierDocsRepository.save(supplierDocs);
+    await this.supplierRepository.save(supplier);
 
     return {
       message: 'docs successfully uploaded',
