@@ -1,6 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { MenuTypeEntity } from './type.entity';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
+import { FeedbackEntity } from './feedback.entity';
 
 @Entity('menu')
 export class MenuEntity {
@@ -36,4 +43,7 @@ export class MenuEntity {
 
   @ManyToOne(() => SupplierEntity, (sup) => sup.items)
   supplier: SupplierEntity;
+
+  @OneToMany(() => FeedbackEntity, (feedback) => feedback.food)
+  feedbacks: FeedbackEntity[];
 }
