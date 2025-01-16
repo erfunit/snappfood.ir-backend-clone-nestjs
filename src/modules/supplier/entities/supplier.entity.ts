@@ -2,15 +2,18 @@ import { EntityName } from 'src/common/enums/entity-name.enum';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { SupplierOTPEntity } from './supplier-otp.entity';
 import { SupplierStatus } from '../enum/supplier-status.enum';
+import { SupplierDocsEntity } from './supplier-docs.entity';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity {
@@ -67,4 +70,17 @@ export class SupplierEntity {
   @OneToOne(() => SupplierOTPEntity, (otp) => otp.supplier)
   @JoinColumn()
   otp: SupplierOTPEntity;
+
+  @Column()
+  docsId: number;
+
+  @OneToOne(() => SupplierDocsEntity, (doc) => doc.supplier)
+  @JoinColumn({ name: 'docsId' })
+  docs: SupplierDocsEntity;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

@@ -23,6 +23,7 @@ import { JwtService } from '@nestjs/jwt';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { SupplierStatus } from './enum/supplier-status.enum';
+import { DocumentsType } from './types/doc.type';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SupplierService {
@@ -155,6 +156,11 @@ export class SupplierService {
       refreshToken,
       message: 'phone number registered successfully',
     };
+  }
+
+  async uploadDocuments(files: DocumentsType) {
+    const { acceptedDoc, image } = files;
+    return files;
   }
 
   makeTokensForUser(payload: TokensPayload) {
