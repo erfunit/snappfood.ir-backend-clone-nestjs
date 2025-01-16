@@ -37,6 +37,7 @@ export class MenuTypeController {
   }
 
   @Patch(':id')
+  @ApiConsumes(SwaggerConsumes.Json, SwaggerConsumes.UrlEncoded)
   @UseGuards(SupplierAuthGuard)
   @ApiBearerAuth('Authorization')
   update(
