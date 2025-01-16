@@ -17,7 +17,7 @@ export class MenuTypeEntity {
   title: string;
 
   @Column()
-  suppliderId: number;
+  supplierId: number;
 
   @ManyToOne(() => SupplierEntity, (sup) => sup.menu_types, {
     onDelete: 'CASCADE',
