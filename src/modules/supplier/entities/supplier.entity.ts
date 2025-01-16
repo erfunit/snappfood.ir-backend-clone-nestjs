@@ -15,6 +15,7 @@ import { SupplierOTPEntity } from './supplier-otp.entity';
 import { SupplierStatus } from '../enum/supplier-status.enum';
 import { SupplierDocsEntity } from './supplier-docs.entity';
 import { MenuTypeEntity } from 'src/modules/menu/entities/type.entity';
+import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity {
@@ -81,6 +82,9 @@ export class SupplierEntity {
   @OneToOne(() => SupplierDocsEntity, (doc) => doc.supplier)
   @JoinColumn({ name: 'docsId' })
   docs: SupplierDocsEntity;
+
+  @OneToMany(() => MenuEntity, (menu) => menu.supplier)
+  items: MenuEntity[];
 
   @CreateDateColumn()
   created_at: Date;
