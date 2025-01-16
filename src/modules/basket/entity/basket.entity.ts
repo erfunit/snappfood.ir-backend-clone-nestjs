@@ -18,7 +18,7 @@ export class BasketEntity {
   @Column()
   count: number;
 
-  @Column()
+  @Column({ nullable: true })
   discountId: number;
 
   @ManyToOne(() => MenuEntity, (food) => food.baskets, { onDelete: 'CASCADE' })

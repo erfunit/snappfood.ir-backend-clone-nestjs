@@ -1,6 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class DiscountDto {
   @ApiProperty()
@@ -8,14 +16,18 @@ export class DiscountDto {
   @IsNotEmpty()
   code: string;
 
-  @ApiPropertyOptional()
-  @Transform(({ value }) =>
-    typeof value === 'string' ? parseFloat(value) : value,
-  )
+  @Transform(({ value }) => {
+    if (value === undefined || value === null) return value;
+    return typeof value === 'string' ? parseFloat(value) : value;
+  })
+  @IsOptional()
   @IsNumber()
+  @Min(0)
+  @Max(100)
   percent: number;
 
   @ApiPropertyOptional()
+  @IsOptional()
   @Transform(({ value }) =>
     typeof value === 'string' ? parseFloat(value) : value,
   )
@@ -23,6 +35,7 @@ export class DiscountDto {
   amount: number;
 
   @ApiPropertyOptional({ description: 'for how many days?' })
+  @IsOptional()
   @Transform(({ value }) =>
     typeof value === 'string' ? parseInt(value, 10) : value,
   )
@@ -30,6 +43,7 @@ export class DiscountDto {
   expires_in: number;
 
   @ApiPropertyOptional({ description: 'for how many usage time?' })
+  @IsOptional()
   @Transform(({ value }) =>
     typeof value === 'string' ? parseInt(value, 10) : value,
   )
@@ -37,6 +51,7 @@ export class DiscountDto {
   limit: number;
 
   @ApiPropertyOptional({ default: 'true' })
+  @IsOptional()
   @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   active: boolean;

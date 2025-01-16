@@ -17,7 +17,7 @@ export class DiscountController {
   constructor(private readonly discountService: DiscountService) {}
 
   @Post()
-  @ApiConsumes(SwaggerConsumes.Json, SwaggerConsumes.MultipartData)
+  @ApiConsumes(SwaggerConsumes.Json, SwaggerConsumes.UrlEncoded)
   create(@Body() discountDto: DiscountDto) {
     return this.discountService.create(discountDto);
   }
