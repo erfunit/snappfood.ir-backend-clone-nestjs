@@ -11,4 +11,7 @@ export enum EntityName {
   MenuType = 'menu_type',
   Feedback = 'feedback',
   Discount = 'discount',
+  Order = 'order',
+  OrderItem = 'order_item',
+  Payment = 'payment',
 }
