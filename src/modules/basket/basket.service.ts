@@ -8,6 +8,7 @@ import { MenuService } from '../menu/service/menu.service';
 import { DiscountService } from '../discount/discount.service';
 import { BasketEntity } from './entity/basket.entity';
 import { DiscountEntity } from '../discount/entity/discount.entity';
+import { BasketType, FoodItem } from './basket.type';
 
 @Injectable({ scope: Scope.REQUEST })
 export class BasketService {
@@ -20,7 +21,7 @@ export class BasketService {
     private readonly discountService: DiscountService,
   ) {}
 
-  async getBasket() {
+  async getBasket(): Promise<BasketType> {
     const { id: userId } = this.request.user;
     const basketItems = await this.basketRepository.find({
       relations: ['discount', 'food', 'food.supplier'],
@@ -40,7 +41,7 @@ export class BasketService {
     let totalAmount = 0;
     let paymentAmount = 0;
     let totalDiscountAmount = 0;
-    const foodList = [];
+    const foodList: FoodItem[] = [];
 
     for (const item of foods) {
       let foodDiscountAmount = 0;
@@ -87,6 +88,7 @@ export class BasketService {
       totalDiscountAmount += foodDiscountAmount;
 
       foodList.push({
+        food_id: food.id,
         name: food.title,
         description: food.description,
         count,
@@ -97,6 +99,7 @@ export class BasketService {
         payment_amount: itemPaymentAmount,
         discount_code: discountCode,
         supplier_name: food.supplier.store_name,
+        supplier_id: food.supplier.id,
       });
     }
 

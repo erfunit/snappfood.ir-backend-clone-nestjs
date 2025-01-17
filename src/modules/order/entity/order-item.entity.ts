@@ -20,7 +20,7 @@ export class OrderItemEntity {
   count: number;
 
   @Column()
-  suplierId: number;
+  supplierId: number;
 
   @Column({
     type: 'enum',

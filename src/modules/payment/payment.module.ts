@@ -8,6 +8,8 @@ import { PaymentController } from './payment.controller';
 import { MenuModule } from '../menu/menu.module';
 import { DiscountModule } from '../discount/discount.module';
 import { HTTPApiModule } from '../http/http.module';
+import { OrderService } from '../order/order.service';
+import { PaymentEntity } from './entity/patment.entity';
 
 @Module({
   imports: [
@@ -15,9 +17,9 @@ import { HTTPApiModule } from '../http/http.module';
     HTTPApiModule,
     MenuModule,
     DiscountModule,
-    TypeOrmModule.forFeature([BasketEntity]),
+    TypeOrmModule.forFeature([BasketEntity, PaymentEntity]),
   ],
-  providers: [PaymentService, BasketService],
+  providers: [PaymentService, BasketService, OrderService],
   controllers: [PaymentController],
 })
 export class PaymentModule {}
