@@ -12,14 +12,14 @@ import { DiscountService } from '../discount/discount.service';
 
 @Module({
   imports: [
+    MenuModule,
+    AuthModule,
     TypeOrmModule.forFeature([
       BasketEntity,
       MenuEntity,
       MenuTypeEntity,
       DiscountEntity,
     ]),
-    MenuModule,
-    AuthModule,
   ],
   controllers: [BasketController],
   providers: [BasketService, DiscountService],

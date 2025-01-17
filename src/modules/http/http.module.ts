@@ -1,6 +1,6 @@
-import { HttpModule, HttpService } from '@nestjs/axios';
+import { HttpModule } from '@nestjs/axios';
 import { Global, Module } from '@nestjs/common';
-import { HTTPApiService } from './http.service';
+import { ZarinpalService } from './zarinpal.service';
 
 @Global()
 @Module({
@@ -10,7 +10,7 @@ import { HTTPApiService } from './http.service';
       timeout: 5000,
     }),
   ],
-  providers: [HttpService, HTTPApiService],
-  exports: [HttpService, HTTPApiService],
+  providers: [ZarinpalService],
+  exports: [ZarinpalService],
 })
 export class HTTPApiModule {}
