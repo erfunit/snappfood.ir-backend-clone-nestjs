@@ -11,17 +11,17 @@ namespace NodeJS {
     DB_PASSWORD: string;
     DB_HOST: string;
 
-    // secrets
-    // COOKIE_SECRET: string;
-    // OTP_TOKEN_SECRET: string;
-    // ACCESS_TOKEN_SECRET: string;
-    // EMAIL_TOKEN_SECRET: string;
-    // PHONE_TOKEN_SECRET: string;
-
     S3_SECRET_KEY: string;
     S3_ACCESS_KEY: string;
     S3_BUCKET_NAME: string;
     S3_ENDPOINT: string;
+
+    ACCESS_TOKEN_SECRET: string;
+    REFRESH_TOKEN_SECRET: string;
+    ZARINPAL_REQUEST_URL: string;
+    ZARINPAL_VERIFY_URL: string;
+    ZARINPAL_GATEWAY_URL: string;
+    ZARINPAL_MERCHANT_ID: string;
   }
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
