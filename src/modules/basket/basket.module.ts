@@ -7,14 +7,21 @@ import { MenuEntity } from '../menu/entities/menu.entity';
 import { MenuTypeEntity } from '../menu/entities/type.entity';
 import { MenuModule } from '../menu/menu.module';
 import { AuthModule } from '../auth/auth.module';
+import { DiscountEntity } from '../discount/entity/discount.entity';
+import { DiscountService } from '../discount/discount.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([BasketEntity, MenuEntity, MenuTypeEntity]),
+    TypeOrmModule.forFeature([
+      BasketEntity,
+      MenuEntity,
+      MenuTypeEntity,
+      DiscountEntity,
+    ]),
     MenuModule,
     AuthModule,
   ],
   controllers: [BasketController],
-  providers: [BasketService],
+  providers: [BasketService, DiscountService],
 })
 export class BasketModule {}

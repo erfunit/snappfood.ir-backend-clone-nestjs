@@ -29,8 +29,6 @@ export class BasketEntity {
   })
   user: UserEntity;
 
-  @ManyToOne(() => DiscountEntity, (discount) => discount.baskets, {
-    onDelete: 'SET NULL',
-  })
+  @ManyToOne(() => DiscountEntity, (discount) => discount.baskets)
   discount: DiscountEntity;
 }

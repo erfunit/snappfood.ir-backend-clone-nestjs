@@ -65,4 +65,10 @@ export class DiscountService {
       message: 'discount deleted successfully',
     };
   }
+
+  async findByCode(code: string) {
+    const discount = await this.discountRepository.findOneBy({ code });
+    if (!discount) throw new NotFoundException('discount code not found');
+    return discount;
+  }
 }

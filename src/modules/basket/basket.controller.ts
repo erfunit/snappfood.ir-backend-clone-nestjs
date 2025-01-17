@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BasketService } from './basket.service';
-import { AddToBasketDto } from './dto/basket.dto';
+import { AddToBasketDto, DiscountBasketDto } from './dto/basket.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { SwaggerConsumes } from 'src/common/enums/swagger-consumes';
@@ -25,6 +25,12 @@ export class BasketController {
     return this.basketService.addToBasket(basketDto);
   }
 
+  @Post('/discount')
+  @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
+  addDiscount(@Body() discountDto: DiscountBasketDto) {
+    return this.basketService.addDiscount(discountDto);
+  }
+
   @Get()
   getBasket() {}
 
@@ -32,5 +38,11 @@ export class BasketController {
   @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
   removeFromBasket(@Query() basketDto: AddToBasketDto) {
     return this.basketService.removeFromBasket(basketDto);
+  }
+
+  @Delete('/discount')
+  @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
+  removeDiscount(@Query() discountDto: DiscountBasketDto) {
+    return this.basketService.removeDiscount(discountDto);
   }
 }
