@@ -20,7 +20,7 @@ export class OrderEntity {
   @Column()
   userId: number;
 
-  @Column()
+  @Column({ nullable: true })
   addressId: number;
 
   @Column()
