@@ -32,7 +32,9 @@ export class BasketController {
   }
 
   @Get()
-  getBasket() {}
+  getBasket() {
+    return this.basketService.getBasket();
+  }
 
   @Delete()
   @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)

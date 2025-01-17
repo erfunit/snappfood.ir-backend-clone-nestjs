@@ -11,11 +11,12 @@ import {
 } from '@nestjs/common';
 import { MenuTypeService } from '../service/type.service';
 import { SupplierAuthGuard } from 'src/modules/supplier/guard/supplier-auth.guard';
-import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { SwaggerConsumes } from 'src/common/enums/swagger-consumes';
 import { MenuTypeDto } from '../dto/menu-type.dto';
 
 @Controller('menu-type')
+@ApiTags('Menu Types')
 export class MenuTypeController {
   constructor(private readonly menuTypeService: MenuTypeService) {}
 

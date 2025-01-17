@@ -14,13 +14,124 @@ export class BasketService {
   constructor(
     @InjectRepository(BasketEntity)
     private readonly basketRepository: Repository<BasketEntity>,
-    @InjectRepository(DiscountEntity)
-    private readonly discountRepository: Repository<DiscountEntity>,
     @Inject(REQUEST)
     private readonly request: Request,
     private readonly menuService: MenuService,
     private readonly discountService: DiscountService,
   ) {}
+
+  async getBasket() {
+    const { id: userId } = this.request.user;
+    const basketItems = await this.basketRepository.find({
+      relations: ['discount', 'food', 'food.supplier'],
+      where: {
+        userId,
+      },
+    });
+
+    const foods = basketItems.filter((item) => item.foodId);
+    const supplierDiscounts = basketItems.filter(
+      (item) => item?.discount?.supplierId,
+    );
+    const generalDiscount = basketItems.find(
+      (item) => item?.discount?.id && !item?.discount?.supplierId,
+    );
+
+    let totalAmount = 0;
+    let paymentAmount = 0;
+    let totalDiscountAmount = 0;
+    const foodList = [];
+
+    for (const item of foods) {
+      let foodDiscountAmount = 0;
+      let discountCode: string = null;
+      const { food, count } = item;
+      const supplierId = food.supplierId;
+      const foodOriginalPrice = food.price;
+      let foodFinalPrice = foodOriginalPrice;
+
+      // Apply food-specific discounts to the unit price
+      if (food.discount > 0) {
+        const specificDiscount = foodOriginalPrice * (food.discount / 100);
+        foodDiscountAmount += specificDiscount * count; // Calculate for all items
+        foodFinalPrice -= specificDiscount;
+      }
+
+      const itemTotalAmount = foodOriginalPrice * count;
+      totalAmount += itemTotalAmount;
+
+      // Apply supplier-specific discounts
+      const discountItem = supplierDiscounts.find(
+        ({ discount }) => discount.supplierId === supplierId,
+      );
+      if (discountItem) {
+        const {
+          discount: { active, amount, percent, usage, limit, code },
+        } = discountItem;
+        if (active && (!limit || limit > usage)) {
+          discountCode = code;
+          if (percent > 0) {
+            const percentDiscount = foodFinalPrice * (percent / 100);
+            foodDiscountAmount += percentDiscount * count;
+            foodFinalPrice -= percentDiscount;
+          } else if (amount > 0) {
+            const amountDiscount = Math.min(amount, foodFinalPrice);
+            foodDiscountAmount += amountDiscount * count;
+            foodFinalPrice -= amountDiscount;
+          }
+        }
+      }
+
+      const itemPaymentAmount = foodFinalPrice * count;
+      paymentAmount += itemPaymentAmount;
+      totalDiscountAmount += foodDiscountAmount;
+
+      foodList.push({
+        name: food.title,
+        description: food.description,
+        count,
+        image: food.image,
+        price: foodOriginalPrice,
+        total_amount: itemTotalAmount,
+        discount_amount: foodDiscountAmount,
+        payment_amount: itemPaymentAmount,
+        discount_code: discountCode,
+        supplier_name: food.supplier.store_name,
+      });
+    }
+
+    // Apply general discount
+    let generalDiscountDetail = {};
+    if (generalDiscount?.discount?.active) {
+      const {
+        discount: { limit, usage, amount, percent, code },
+      } = generalDiscount;
+      if (!limit || limit > usage) {
+        let generalDiscountAmount = 0;
+        if (percent > 0) {
+          generalDiscountAmount = paymentAmount * (percent / 100);
+        } else if (amount > 0) {
+          generalDiscountAmount = Math.min(amount, paymentAmount);
+        }
+        paymentAmount -= generalDiscountAmount;
+        totalDiscountAmount += generalDiscountAmount;
+        generalDiscountDetail = {
+          code,
+          amount,
+          percent,
+          discount_amount: generalDiscountAmount,
+        };
+      }
+    }
+
+    return {
+      food_list: foodList,
+      total_amount: totalAmount,
+      payment_amount: Math.max(0, paymentAmount),
+      total_discount_amount: totalDiscountAmount,
+      general_discount_detail: generalDiscountDetail,
+    };
+  }
 
   async addToBasket({ foodId }: AddToBasketDto) {
     const { id: userId } = this.request.user;
