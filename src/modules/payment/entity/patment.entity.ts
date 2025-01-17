@@ -23,6 +23,9 @@ export class PaymentEntity {
   @Column()
   invoice_number: string;
 
+  @Column({ nullable: true })
+  authority: string;
+
   @Column()
   invoice_date: Date;
 

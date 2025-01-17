@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
 export class PaymentDto {
@@ -13,4 +13,9 @@ export class PaymentDataDto {
   invoice_number: string;
   orderId: number;
   status: boolean;
+}
+
+export class VerifyPaymentDto {
+  Authority: string;
+  Status: 'OK' | 'NOK';
 }

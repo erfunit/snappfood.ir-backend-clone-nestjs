@@ -1,4 +1,10 @@
-import { BadRequestException, Inject, Injectable, Scope } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Scope,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderEntity } from './entity/order.entity';
 import { DataSource, DeepPartial, Repository } from 'typeorm';
@@ -14,6 +20,8 @@ import { OrderItemEntity } from './entity/order-item.entity';
 @Injectable({ scope: Scope.REQUEST })
 export class OrderService {
   constructor(
+    @InjectRepository(OrderEntity)
+    private readonly orderRepository: Repository<OrderEntity>,
     private dataSource: DataSource,
     @Inject(REQUEST)
     private readonly request: Request,
@@ -63,5 +71,15 @@ export class OrderService {
       await queryRunner.release();
       throw error;
     }
+  }
+
+  async findOne(id: number) {
+    const order = await this.orderRepository.findOneBy({ id });
+    if (!order) throw new InternalServerErrorException('something went wrong');
+    return order;
+  }
+
+  async save(order: DeepPartial<OrderEntity>) {
+    await this.orderRepository.save(order);
   }
 }
