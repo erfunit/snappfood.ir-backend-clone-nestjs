@@ -10,6 +10,7 @@ import { DiscountModule } from '../discount/discount.module';
 import { HTTPApiModule } from '../http/http.module';
 import { OrderService } from '../order/order.service';
 import { PaymentEntity } from './entity/patment.entity';
+import { OrderEntity } from '../order/entity/order.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { PaymentEntity } from './entity/patment.entity';
     HTTPApiModule,
     MenuModule,
     DiscountModule,
-    TypeOrmModule.forFeature([BasketEntity, PaymentEntity]),
+    TypeOrmModule.forFeature([BasketEntity, PaymentEntity, OrderEntity]),
   ],
   providers: [PaymentService, BasketService, OrderService],
   controllers: [PaymentController],

@@ -14,6 +14,6 @@ export function TypeOrmConfig(): TypeOrmModuleOptions {
     password: DB_PASSWORD,
     database: DB_NAME,
     entities: ['dist/**/*.entity{.js,.ts}'],
-    synchronize: true,
+    synchronize: false,
   };
 }
